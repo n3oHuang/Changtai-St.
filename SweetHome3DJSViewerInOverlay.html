@@ -86,6 +86,10 @@ html, body {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
+.operation-instructions.hidden {
+  display: none;
+}
+
 .operation-instructions h4 {
   margin: 0 0 10px 0;
   font-size: 16px;
@@ -125,6 +129,31 @@ html, body {
   color: #ff6b6b;
 }
 
+/* Toggle button for showing instructions */
+.instructions-toggle {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-size: 14px;
+  z-index: 999;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: background-color 0.3s;
+  display: none;
+}
+
+.instructions-toggle:hover {
+  background-color: rgba(0, 0, 0, 0.85);
+}
+
+.instructions-toggle.show {
+  display: block;
+}
+
 /* Responsive font size for mobile */
 @media (max-width: 768px) {
   .footer {
@@ -144,6 +173,11 @@ html, body {
   .operation-instructions h4 {
     font-size: 15px;
   }
+  
+  .instructions-toggle {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
 }
 
 /* Hide the close button (X) in overlay */
@@ -160,9 +194,14 @@ input[type="button"][value="×"],
 </head>
 
 <body>
+<!-- Toggle button to show instructions -->
+<div id="instructionsToggle" class="instructions-toggle" onclick="toggleInstructions()">
+  📱 操作說明
+</div>
+
 <!-- Operation Instructions -->
 <div id="operationInstructions" class="operation-instructions">
-  <button class="close-btn" onclick="document.getElementById('operationInstructions').style.display='none'">✕</button>
+  <button class="close-btn" onclick="closeInstructions()">✕</button>
   <h4>📱 操作說明</h4>
   <div id="instructionsContent"></div>
 </div>
@@ -176,6 +215,24 @@ input[type="button"][value="×"],
   function isMobileOrTablet() {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
            || window.innerWidth <= 768;
+  }
+  
+  // Toggle instructions visibility
+  function toggleInstructions() {
+    var instructions = document.getElementById('operationInstructions');
+    var toggle = document.getElementById('instructionsToggle');
+    
+    instructions.classList.remove('hidden');
+    toggle.classList.remove('show');
+  }
+  
+  // Close instructions
+  function closeInstructions() {
+    var instructions = document.getElementById('operationInstructions');
+    var toggle = document.getElementById('instructionsToggle');
+    
+    instructions.classList.add('hidden');
+    toggle.classList.add('show');
   }
   
   // Display operation instructions based on device type
@@ -197,7 +254,7 @@ input[type="button"][value="×"],
         '<ul>' +
         '<li>單指拖曳：改變視角</li>' +
         '<li>導航按鈕：移動位置</li>' +
-        '<li>雙指縮放：放大/縮小</li>' +
+        '<li>雙指縮放：前進/後退</li>' +
         '</ul>';
     } else {
       // Desktop instructions
